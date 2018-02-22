@@ -181,7 +181,7 @@ add_action( 'admin_bar_menu', 'l2p_admin_bar_menu', 1000 );
 function l2p_on_tools_page() {
 	$on_tools_page = false;
 	if ( function_exists( 'get_current_screen' ) ) {
-		if ( get_current_screen()->base == 'tools_page_link2post_tools' ) {
+		if ( 'tools_page_link2post_tools' === get_current_screen()->base ) {
 			$on_tools_page = true;
 		}
 	}
@@ -264,7 +264,7 @@ function l2p_update( $url = '', $old_post_id = null, $return_result = false ) {
 			$url = $_POST['l2p_url'];       // this gets escaped later when used in queries and updates
 		}
 	}
-	if ( $old_post_id == null ) {
+	if ( null === $old_post_id ) {
 		if ( isset( $_POST['l2p_old_post_id'] ) ) {
 			$old_post_id = $_POST['l2p_old_post_id'];
 		}
