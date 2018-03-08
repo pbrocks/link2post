@@ -9,7 +9,7 @@
  * Text Domain: link2post
  */
 
-define( 'L2P_VERSION', '.1' );
+define( 'L2P_VERSION', '.1.1' );
 
 /**
  * Register and enqueue a custom stylesheet in the WordPress admin.
@@ -30,7 +30,16 @@ require_once( L2P_DIR . '/modules/youtube.php' );
 require_once( L2P_DIR . '/modules/gist.php' );
 require_once( L2P_DIR . '/modules/codepen.php' );
 require_once( L2P_DIR . '/modules/jsfiddle.php' );
+require_once( L2P_DIR . '/modules/pmpro_module.php' );
 
+/**
+ * Load welcome page
+ */
+require_once( L2P_DIR . '/class-help-welcome-menus.php' );
+register_activation_hook( __FILE__, 'l2p_install' );
+function l2p_install() {
+	set_transient( 'l2p_activated', true, 30 );
+}
 /**
  * Require any custom modules here
  */
