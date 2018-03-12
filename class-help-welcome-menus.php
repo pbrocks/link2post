@@ -111,13 +111,18 @@ class Help_Welcome_Menus {
 	public function admin_add_help_tab() {
 		global $l2p_help_page;
 		$screen = get_current_screen();
+		$post_types = get_post_types();
+		$post_type = '';
+		foreach ( $post_types as $key => $value ) {
+			$post_type .= $value . '<br>';
+		}
 
 		// Add my_help_tab if current screen is My Admin Page
 		$screen->add_help_tab(
 			array(
-				'id'    => 'l2p_help_tab_1',
-				'title' => __( 'L2P Help Tab One' ),
-				'content'   => '<p>' . __( 'Use this field to describe to the user what text you want on the help tab.' ) . '</p>',
+				'id'    => '$post_types',
+				'title' => __( 'Post Types' ),
+				'content'   => '<pre>' . $post_type . '</pre>',
 			)
 		);
 		$screen->add_help_tab(
@@ -145,40 +150,121 @@ class Help_Welcome_Menus {
 
 	public function l2p_help_admin_page() {
 		require_once( PMPRO_DIR . '/adminpages/admin_header.php' );
-		echo '<h2>' . __FUNCTION__ . '</h2>';
-		echo '<h3>' . __FILE__ . '</h3>';
-		echo '<h4>Page built with:</h4>';
+		echo '<h4>' . __FILE__ . '</h4>';
 		echo '<h1 style="color:salmon;">' . __CLASS__ . '</h1>';
-		$post_types = get_post_types();
-		echo '<pre>';
-		print_r( $post_types );
-		echo '</pre>';
-		echo '<pre>
-	add_action( \'admin_menu\', \'l2p_admin_help_tab\' );
-	function l2p_admin_help_tab() {
-	    $l2p_help_page = add_options_page( __( \'L2P Help Tab Page\', \'link2post\' ), __( \'L2P Help Tab Page\', \'link2post\' ),
-	        \'manage_options\', \'link2post.php\', \'l2p_help_admin_page\' );
-	    add_action( \'load-\' . $l2p_help_page, \'admin_add_help_tab\' );
-	}</pre>';
-		// function admin_add_help_tab() {
-		// global $l2p_help_page;
-		// $screen = get_current_screen();
-		// Add my_help_tab if current screen is My Admin Page
-		// $screen->add_help_tab(
-		// array(
-		// \'id\'    => \'l2p_help_tab\',
-		// \'title\' => __( \'L2P Help Tab\' ),
-		// \'content\'   => \'<p>\' . __( \'Use this field to describe to the user what text you want on the help tab.\' ) . \'</p>\',
-		// )
-		// );
+		// $post_types = get_post_types();
+		// echo '<pre>';
+		// print_r( $post_types );
+		// echo '</pre>';
+		// echo $form;
+		$url = 'https://gist.github.com/b906f3e1566cc129657bf169d2c74df1';
+		echo '<h3>Processing: <span style="color:tomato">' . $url . '</span></h3>';
+		// ob_start(); // start capturing output
+		// include( 'csv/return-gists-kimcoleman.csv' ); // execute the file
+		// $array = ob_get_contents(); // get the contents from the buffer
+		// ob_end_clean();
+		// echo '$array is a ' . gettype( $array ) . '<pre> print_r() ';
+		// print_r( $array );
+		// echo '</pre>';
+		$this->parse_this_url( $url );
+		// $gist_post = $this->send_these_urls();
+		// $gist_post = $this->parse_this_url( $url );
+		// if ( ! empty( $gist_post ) ) {
+		// echo '<h3>It did something!</h3>';
+		// } else {
+		// echo '<h3>It did nothing!</h3>';
 		// }
-		// function l2p_help_admin_page() {
-		// echo \'<div class="wrap">\';
-		// echo \'<h2>\' . __FUNCTION__ . \'</h2>\';
-		// echo \'<h3>\' . __FILE__ . \'</h3>\';
-		// echo \'</div>\';
-		// }
-		// </pre>';
+		echo do_shortcode( '[pbrx-ajax-form]' );
 		require_once( PMPRO_DIR . '/adminpages/admin_footer.php' );
+	}
+
+	public function send_these_urls() {
+		$array = 'https://gist.github.com/6d9c51b31a5e794bfac629fd6c41897c
+// https://gist.github.com/1b480f16506163d4dbf23f3d64ab0468
+// https://gist.github.com/08c2d466ea370ae19bab983aeb0140cd
+// https://gist.github.com/69249876ef3e5dd15699d22c2789c87d
+// https://gist.github.com/94edb917c37e166c380aae6d3a4d4af6
+// https://gist.github.com/b7a17d5cdaff5f5375fdec502fe00c3e
+// https://gist.github.com/c961a7210549dc18b2a31db73befe5e9
+// https://gist.github.com/58dc2653bde9156d98dc3b439f4faa2b
+// https://gist.github.com/0528234f20dcd338933daed66a6c0a58
+// https://gist.github.com/41f84b6c46189ad308209c68c7ba016d
+// 
+
+
+
+
+
+
+
+
+
+';
+		$array = explode( "\n", $array );
+		echo '<span style="color:tomato">$array is a ' . gettype( $array ) . '</span>';
+		$i = 9;
+		foreach ( $array as $key => $value ) {
+			// echo '<li style="color:salmon">' . $key . ' => ' . $value . '</li>';
+			if ( $i < $key ) {
+				$this->parse_this_url( $value );
+				sleep( 9 );
+				$i++;
+			}
+		}
+		echo '<h1>Done!!</h1>';
+	}
+
+	public function parse_this_url( $url ) {
+		global $wpdb;
+
+		// no URL, bail
+		if ( empty( $url ) ) {
+			die( 'Your URL is empty ' );
+			// exit;
+		}
+		$objToReturn = new stdClass();
+		$objToReturn->on_tools_page = l2p_on_tools_page();
+
+		// Check if we've already processed this URL.
+		$sqlQuery = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'l2p_url' AND meta_value = '" . esc_url_raw( $url ) . "' LIMIT 1";
+		$old_post_id = $wpdb->get_var( $sqlQuery );
+		if ( empty( (int) $old_post_id ) || get_post_status( (int) $old_post_id ) != 'publish' ) {
+			$objToReturn->new_post_created = true;
+			$objToReturn->new_post_url = l2p_update( $url, null, true );
+			$JSONtoReturn = json_encode( $objToReturn );
+			echo $JSONtoReturn;
+			exit;
+		}
+		$objToReturn->new_post_created = false;
+		$objToReturn->old_post_id = $old_post_id;
+		$objToReturn->old_post_url = get_permalink( $old_post_id );
+
+		$modules = l2p_get_modules();
+
+		// Check the domain of the URL to see if it matches a module.
+		$host = parse_url( $url, PHP_URL_HOST );
+		$found_match = false;
+		foreach ( $modules as $key => $value ) {
+			if ( $host == $value['host'] && get_option( 'l2p_' . $value['quick_name'] . '_content_enabled' ) == 'enabled' ) {
+				$found_match = true;
+				// we found one, use the module's parse function now
+				if ( empty( $value['callback'] ) || empty( $value['can_update'] ) || $value['can_update'] == false ) {
+					$objToReturn->can_update = false;
+				} else {
+					$objToReturn->can_update = true;
+				}
+			}
+		}
+		if ( $found_match == false ) {
+			$objToReturn->can_update = true;
+		}
+		echo '<pre>';
+		print_r( $objToReturn );
+		echo '</pre>';
+
+		// $JSONtoReturn = json_encode( $objToReturn );
+		// echo $JSONtoReturn;
+		exit;
+
 	}
 }

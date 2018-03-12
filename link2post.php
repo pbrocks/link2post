@@ -36,6 +36,7 @@ require_once( L2P_DIR . '/modules/pmpro_module.php' );
  * Load welcome page
  */
 require_once( L2P_DIR . '/class-help-welcome-menus.php' );
+require_once( L2P_DIR . '/class-collect-pmpro-gists.php' );
 register_activation_hook( __FILE__, 'l2p_install' );
 function l2p_install() {
 	set_transient( 'l2p_activated', true, 30 );
@@ -208,12 +209,14 @@ function l2p_submit() {
 		return;
 	}
 
+	$_POST['l2p_url'] = 'https://gist.github.com/kimcoleman/b1afe6398d4e0cf74ccb79d45df0227e';
 	// grab the URL
 	$url = $_POST['l2p_url']; // we escape this later when used in queries and inserts
 
 	// no URL, bail
 	if ( empty( $url ) ) {
-		exit;
+		die( 'Your URL is empty ' );
+		// exit;
 	}
 	$objToReturn = new stdClass();
 	$objToReturn->on_tools_page = l2p_on_tools_page();

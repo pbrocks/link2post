@@ -118,7 +118,8 @@ function l2p_create_gist_cpt() {
 			'labels' => array(
 				'name' => __( 'Gists', 'link2post' ),
 				'singular_name' => __( 'Gist', 'link2post' ),
-				'add_new_item' => __( 'Add New Gist', 'link2post' ),
+				'supports' => __( 'Gist', 'link2post' ),
+				'add_new_item' => __( 'title', 'author', 'editor', 'revisions' , 'custom-fields' ),
 				'edit_item' => __( 'Edit Gist', 'link2post' ),
 				'new_item' => __( 'New Gist', 'link2post' ),
 				'view_item' => __( 'View Gist', 'link2post' ),
