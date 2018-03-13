@@ -30,13 +30,12 @@ require_once( L2P_DIR . '/modules/youtube.php' );
 require_once( L2P_DIR . '/modules/gist.php' );
 require_once( L2P_DIR . '/modules/codepen.php' );
 require_once( L2P_DIR . '/modules/jsfiddle.php' );
-require_once( L2P_DIR . '/modules/pmpro_module.php' );
-
+// require_once( L2P_DIR . '/modules/pmpro_module.php' );
 /**
  * Load welcome page
  */
 require_once( L2P_DIR . '/class-help-welcome-menus.php' );
-require_once( L2P_DIR . '/class-collect-pmpro-gists.php' );
+// require_once( L2P_DIR . '/class-collect-pmpro-gists.php' );
 register_activation_hook( __FILE__, 'l2p_install' );
 function l2p_install() {
 	set_transient( 'l2p_activated', true, 30 );

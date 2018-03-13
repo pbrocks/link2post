@@ -3,7 +3,6 @@
  * text-domain: collect-snippets
  */
 
-new Collect_PMPro_Gists();
 class Collect_PMPro_Gists {
 
 	/**
@@ -16,11 +15,12 @@ class Collect_PMPro_Gists {
 
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'create_admin_menus' ) );
-
 		add_shortcode( 'ajax-submitting-form', array( $this, 'ajax_submitting_shortcode' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'ajax_submitting_scripts' ) );
 		add_action( 'wp_ajax_tie_into_php213', array( $this, 'ajax_returning_function' ) );
 		add_action( 'wp_ajax_nopriv_tie_into_php213', array( $this, 'ajax_returning_function' ) );
+		add_action( 'wp_footer', array( $this, 'add_sidebar_reference_menus' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'add_sidebar_reference_scripts' ) );
 	}
 
 	/**
@@ -398,4 +398,127 @@ class Collect_PMPro_Gists {
 		);
 	}
 
+	public function add_sidebar_reference_scripts() {
+		wp_register_script( 'show-stuff', plugins_url( '/js/show-stuff.js', __FILE__ ), array( 'jquery' ), time() );
+		wp_enqueue_script( 'show-stuff' );
+		wp_register_script( 'sidebar-reference', plugins_url( '/js/sidebar-reference.js', __FILE__ ), array( 'jquery' ), time() );
+		wp_enqueue_script( 'sidebar-reference' );
+		wp_register_style( 'sidebar-reference', plugins_url( '/css/sidebar-reference.css', __FILE__ ), time() );
+		wp_enqueue_style( 'sidebar-reference' );
+	}
+		/**
+		 * Add the page to the admin area
+		 */
+	public function add_sidebar_reference_menus1() {
+	?>
+	<style type="text/css">
+		button#sidebar-trigger {
+			position: absolute;
+			top: 9rem;
+			left: 3rem;
+		}
+		section.sidebar-reference {
+			width: 34%;
+			position: absolute;
+			top: 1rem;
+			right: -40%;
+			background: rgba(40,170,210,.7);
+			height: 100%;
+			padding: 2rem;
+		}
+		section.sidebar-reference.open {
+			right: 1rem;
+		}
+	</style>
+	<button id="sidebar-trigger">Open</button>
+	<section class="sidebar-reference">
+		<div class="referent">
+			<h2>Big Story here</h2>
+		</div>
+	</section>
+	<?php
+	}
+
+	/**
+	 * Add the page to the admin area
+	 */
+	public function add_sidebar_reference_menus() {
+	?>
+	<style type="text/css">
+		button#sidebar-trigger {
+			position: absolute;
+			top: 9rem;
+			left: 3rem;
+		}
+		section.sidebar-reference {
+			width: 34%;
+			position: absolute;
+			top: 1rem;
+			right: -40%;
+			background: rgba(40,170,210,.7);
+			height: 100%;
+			padding: 2rem;
+		}
+		section.sidebar-reference.open {
+			right: 1rem;
+		}
+	</style>
+	<button id="sidebar-trigger">Open</button>
+
+	<section id="sidebar-reference">
+		<input class="sidebar-reference" type="checkbox" id="menu"/>
+		<nav class="sidebar-reference">
+
+			<div class="w3-bar w3-pmpro">
+				<button class="w3-bar-item w3-button" onclick="openReference('Gists')">Gists</button>
+				<button class="w3-bar-item w3-button" onclick="openReference('Hooks')">Hooks</button>
+				<button class="w3-bar-item w3-button" onclick="openReference('Documentation')">Documentation</button>
+			</div>
+
+			<div id="Gists" class="tab-container refSource">
+				<h2>Gists</h2>
+				<p>Bacon ipsum dolor sit amet landjaeger sausage brisket, jerky drumstick fatback boudin ball tip turducken.
+					<?php echo do_shortcode( '[ajax-submitting-form]' ); ?>
+				</p>
+			</div>
+
+			<div id="Hooks" class="tab-container refSource" style="display:none">
+				<h2>Hooks</h2>
+				<p>Capicola shank pig ribeye leberkas filet mignon brisket beef kevin tenderloin porchetta. Capicola fatback venison shank kielbasa, drumstick ribeye landjaeger beef kevin tail meatball pastrami prosciutto pancetta. Tail kevin spare ribs ground round ham ham hock brisket shoulder.</p> 
+			</div>
+
+			<div id="Documentation" class="tab-container refSource" style="display:none">
+				<h2>Documentation</h2>
+				<p>Brisket meatball turkey short loin boudin leberkas meatloaf chuck andouille pork loin pastrami spare ribs pancetta rump. Frankfurter corned beef beef tenderloin short loin meatloaf swine ground round venison.</p>
+			</div>
+
+
+			<!--label is inside the drawer but drawer is moved to left(-100%) when checkbox is not checked but the label is moved from left to 200px so it will look like when drawer is closed the label is there to open a drawer-->
+			<label class="sidebar-reference" for="menu">
+				<!--burger menu without cheese-->
+				<span></span>
+				<span></span>
+			</label>
+			<li><a href="#">One</a></li>
+			<li><a href="#">Two</a></li>
+			<li><a href="#">Three</a></li>
+			<li><a href="#">Four</a></li>
+			<li><a href="#">Five</a></li>
+
+			<script>
+				function openReference(refSourceName) {
+					var i;
+					var x = document.getElementsByClassName("refSource");
+					for (i = 0; i < x.length; i++) {
+						x[i].style.display = "none";  
+					}
+					document.getElementById(refSourceName).style.display = "block";  
+				}
+			</script>
+
+		</nav>
+</section>
+	<?php
+	}
 }
+// new Collect_PMPro_Gists();

@@ -1,0 +1,152 @@
+body,
+html {
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	overflow-x: hidden;
+}
+
+
+input#menu {
+	display: none;
+}
+
+/*label for checkbox*/
+label.sidebar-reference {
+	position: fixed;
+	/*this prevent the label from moving to left when drawer is closed*/
+    cursor: pointer;
+    left: -4rem;
+    width: 4rem;
+    height: 5rem;
+    background-color: rgba(41, 151, 200,1);
+    -webkit-tap-highlight-color: transparent;
+    top: 3rem;
+}
+
+/*burger menu without cheese*/
+label.sidebar-reference span{
+	display: block;
+	width: 2.3rem;
+	height: 1px;
+	background-color: #cdcdcd;
+	position: relative;
+	margin-bottom: 10px;
+	top: 18px;
+	left: 5px;
+	transition: all 0.4s ease-in-out;
+}
+
+/*drawer moved to left (-100%)*/
+nav.sidebar-reference {
+	position: fixed;
+	margin: 0;
+	width: 24rem;
+	height: 100%;
+	background: rgba(41, 151, 200,1);
+	transition: transform 0.4s ease;
+	transform: translateX(101%);
+	right: 1rem;
+}
+nav.sidebar-reference.open {
+    position: fixed;
+    margin: 0;
+    width: 38%;
+    height: 100%;
+    background: rgba(41, 151, 200,1);
+    transition: transform 0.4s ease;
+    transform: translateX(101%);
+    right: 33%;
+    z-index: 333;
+    top: 3rem;
+}
+/*just a lists inside a drawer*/
+nav.sidebar-reference li{
+	-webkit-tap-highlight-color: transparent;
+	text-align: center;
+	list-style-type: none;
+	cursor: pointer;
+	padding: 15px 0 15px 10px;
+}
+
+nav.sidebar-reference a{
+	text-decoration: none; 
+	color: rgba(248, 248, 248, 1);
+	outline: none;
+}
+
+/*drawer links hover underline effects
+rgb(119, 160, 46) = green
+rgb(248, 148, 6) = orange gold
+*/
+nav.sidebar-reference li:after{
+	content: '';
+	position: absolute;
+	margin-top: 30px;
+	left: 0rem;
+	width: 0%;
+	height: 1px;
+	background: linear-gradient(to right, rgb(248, 148, 6), rgb(248, 248, 248));
+	transition: width 0.5s ease-in-out;
+}
+nav.sidebar-reference li:before{
+	content: '';
+	position: absolute;
+	margin-top: 30px;
+	right: -3%;
+	width: 0%;
+	height: 1px;
+	background: linear-gradient(to right, rgb(248, 248, 248), rgb(248, 148, 6));
+	transition: width 0.5s ease-in-out;
+}
+nav.sidebar-reference li:hover:before, nav li:hover:after{
+	width: 44%;
+}
+
+/*main section*/
+/*section.sidebar-reference {
+	transition: transform 0.4s ease;
+	line-height: 30px;
+	margin: 60px;
+	color: #282828;
+}*/
+
+/*when input is checked we will move the drawer back to place*/
+input:checked ~ nav{
+	transform: translateX(1rem);
+}
+
+/*move the section further to the right when input is checked*/
+input:checked ~ section{
+	transform: translateX(-22rem);
+}
+input:checked ~ .tab-content {
+	transform: translateX(0);
+}
+/*when input is checked we make the burger menu to look like crossmark (X)*/
+input:checked ~ nav label span:first-child{
+	transform: rotate(45deg);
+	transform-origin: 30% 0%;
+}
+
+/*when input is checked we make the burger menu to look like crossmark (X)*/
+input:checked ~ nav label span:nth-last-child(1){
+	transform: rotate(-45deg);
+	transform-origin: 20% 0%;
+}
+article {
+	padding: 0 4rem;
+}
+article h1 {
+	padding: 2rem 0;
+}
+.w3-pmpro {
+	background-color: rgb(119, 160, 46);
+	color: rgb(255, 255, 255);
+}
+.tab-container {
+	padding: 0 1rem 2rem;
+	color: rgb(255, 255, 255);
+	border: 1px solid rgb(255, 255, 255);
+
+}
